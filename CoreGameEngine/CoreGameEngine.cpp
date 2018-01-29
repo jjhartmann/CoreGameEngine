@@ -6,8 +6,7 @@
 #define GLEW_STATIC
 
 #include <GL/glew.h>
-#include <OpenGL/gl3.h>
-#include <GLUT/glut.h>
+#include <GLFW/glfw3.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -19,7 +18,10 @@
 #endif
 
 #include <iostream>
+#include <fstream>
 #include "math_3d.h"
+
+using namespace std;
 
 GLuint VBO;
 
@@ -43,26 +45,24 @@ void main()                                                                   \n
 FragColor = vec4(1.0, 0.0, 0.0, 1.0);                                     \n\
 }";
 
-
-void renderScene(void)
-{
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-
-    glDisableVertexAttribArray(0);
-
-	glutSwapBuffers();
+// Load Shader
+static string LoadShader(string filename){
+    
+    std::ifstream file;
+    file.open(filename, ios::in);
+    string line;
+    if (!file) return "error";
+    
+    string shader;
+    while (getline(file, line)){
+        shader += line;
+        shader += "/n";
+    }
+    
+    return shader;
 }
 
-static void InitializeGlutCallbacks()
-{
-	glutDisplayFunc(renderScene);
-}
+
 
 static void CreateVertexBuffer()
 {
@@ -117,6 +117,8 @@ static void CompileShader() {
     }
     
     // Add shaders to program
+    string vertexShader = LoadShader("simpleshader.vert");
+    string fragmentShader = LoadShader("simpleshader.frag");
     AddShader(shaderProgram, pVS, GL_VERTEX_SHADER);
     AddShader(shaderProgram, pFS, GL_FRAGMENT_SHADER);
     
@@ -144,18 +146,110 @@ static void CompileShader() {
     glUseProgram(shaderProgram);
 }
 
+
+#if __APPLE__
+const int WIDTH = 800, HEIGHT = 600;
+int main(int argc, char** argv)
+{
+    // GLFW (OSX doesn't support oGL 3.3 on GLUT)
+    glfwInit();
+    
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    
+    GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "GameEngine", nullptr, nullptr);
+    int screenWidth, screenHeight;
+    glfwGetWindowSize(window, &screenWidth, &screenHeight);
+    
+    if (window == nullptr) {
+        fprintf(stderr, "Failed to create window");
+        return -1;
+    }
+    
+    glfwMakeContextCurrent(window);
+    glewExperimental = GL_TRUE;
+    
+    fprintf(stderr, "GLSL V: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+    
+    GLenum res = glewInit();
+    if (res != GLEW_OK)
+    {
+        std::cout << "Error: %s\n" << glewGetErrorString(res) << std::endl;
+        return -1;
+    }
+    
+    glViewport(0, 0, screenWidth, screenHeight);
+    
+    // Create the vertexs
+    CreateVertexBuffer();
+    
+    // Create and compile shaders
+    CompileShader();
+    
+    // Main Game Loop
+    while (!glfwWindowShouldClose(window)){
+        // Loop for input events
+        glfwPollEvents();
+        
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        
+        glDisableVertexAttribArray(0);
+        
+        glfwSwapBuffers(window);
+    }
+    
+    glfwTerminate();
+    
+
+    
+    return 0;
+}
+
+#else
+
+void renderScene(void)
+{
+    
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    
+    glDisableVertexAttribArray(0);
+    
+    glutSwapBuffers();
+}
+
+static void InitializeGlutCallbacks()
+{
+    glutDisplayFunc(renderScene);
+}
+
 int main(int argc, char** argv)
 {
 	// Init glut
 	glutInit(&argc, argv);
 
 	// Configure Display
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_3_2_CORE_PROFILE);
 
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+    
 	glutInitWindowSize(1024, 768);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("GameEngine");
 
+    fprintf(stderr, "GLSL V: %s", glGetString(GL_VERSION));
+    
 	// register callbacks
 	InitializeGlutCallbacks();
 
@@ -178,3 +272,5 @@ int main(int argc, char** argv)
 	glutMainLoop();
 	return 0;
 }
+
+#endif
