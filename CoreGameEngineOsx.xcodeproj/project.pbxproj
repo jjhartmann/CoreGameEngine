@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		773CF8FA201ED19D00094B42 /* simpleshader.vert in Copy Files */ = {isa = PBXBuildFile; fileRef = 773CF8F8201ED08800094B42 /* simpleshader.vert */; };
+		773CF8FB201ED1A700094B42 /* simpleshader.frag in Copy Files */ = {isa = PBXBuildFile; fileRef = 773CF8F9201ED09500094B42 /* simpleshader.frag */; };
+		773CF8FD201EDEA900094B42 /* libglfw.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 773CF8FC201EDEA800094B42 /* libglfw.3.2.dylib */; };
 		774BF5EA201D794A008E1A93 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 774BF5E9201D794A008E1A93 /* OpenGL.framework */; };
 		774BF5EC201D79A1008E1A93 /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 774BF5EB201D79A1008E1A93 /* libGLEW.2.1.0.dylib */; };
 		774BF5EE201D79CD008E1A93 /* libglut.3.10.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 774BF5ED201D79CD008E1A93 /* libglut.3.10.0.dylib */; };
@@ -14,18 +17,24 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		774BF5DC201D78DE008E1A93 /* CopyFiles */ = {
+		774BF5DC201D78DE008E1A93 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
+			buildActionMask = 12;
+			dstPath = "${CONFIGURATION_BUILD_DIR}";
 			dstSubfolderSpec = 0;
 			files = (
+				773CF8FB201ED1A700094B42 /* simpleshader.frag in Copy Files */,
+				773CF8FA201ED19D00094B42 /* simpleshader.vert in Copy Files */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		773CF8F8201ED08800094B42 /* simpleshader.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = simpleshader.vert; sourceTree = "<group>"; };
+		773CF8F9201ED09500094B42 /* simpleshader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = simpleshader.frag; sourceTree = "<group>"; };
+		773CF8FC201EDEA800094B42 /* libglfw.3.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.2.dylib; path = ../../../../usr/local/Cellar/glfw/3.2.1/lib/libglfw.3.2.dylib; sourceTree = "<group>"; };
 		774BF5DE201D78DE008E1A93 /* CoreGameEngineOsx */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CoreGameEngineOsx; sourceTree = BUILT_PRODUCTS_DIR; };
 		774BF5E9201D794A008E1A93 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		774BF5EB201D79A1008E1A93 /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../../usr/local/Cellar/glew/2.1.0/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
@@ -39,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				773CF8FD201EDEA900094B42 /* libglfw.3.2.dylib in Frameworks */,
 				774BF5EE201D79CD008E1A93 /* libglut.3.10.0.dylib in Frameworks */,
 				774BF5EC201D79A1008E1A93 /* libGLEW.2.1.0.dylib in Frameworks */,
 				774BF5EA201D794A008E1A93 /* OpenGL.framework in Frameworks */,
@@ -70,6 +80,8 @@
 			children = (
 				77A5C5FC201D7BB200B39126 /* math_3d.h */,
 				77A5C5FA201D7AA300B39126 /* CoreGameEngine.cpp */,
+				773CF8F8201ED08800094B42 /* simpleshader.vert */,
+				773CF8F9201ED09500094B42 /* simpleshader.frag */,
 			);
 			path = CoreGameEngine;
 			sourceTree = "<group>";
@@ -77,6 +89,7 @@
 		774BF5E8201D794A008E1A93 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				773CF8FC201EDEA800094B42 /* libglfw.3.2.dylib */,
 				774BF5ED201D79CD008E1A93 /* libglut.3.10.0.dylib */,
 				774BF5EB201D79A1008E1A93 /* libGLEW.2.1.0.dylib */,
 				774BF5E9201D794A008E1A93 /* OpenGL.framework */,
@@ -93,7 +106,7 @@
 			buildPhases = (
 				774BF5DA201D78DE008E1A93 /* Sources */,
 				774BF5DB201D78DE008E1A93 /* Frameworks */,
-				774BF5DC201D78DE008E1A93 /* CopyFiles */,
+				774BF5DC201D78DE008E1A93 /* Copy Files */,
 			);
 			buildRules = (
 			);
@@ -261,7 +274,9 @@
 					"$(inherited)",
 					/usr/local/Cellar/glew/2.1.0/lib,
 					/usr/local/Cellar/freeglut/3.0.0/lib,
+					/usr/local/Cellar/glfw/3.2.1/lib,
 				);
+				"OTHER_CPLUSPLUSFLAGS[arch=*]" = "-Wno-deprecated";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -276,6 +291,7 @@
 					"$(inherited)",
 					/usr/local/Cellar/glew/2.1.0/lib,
 					/usr/local/Cellar/freeglut/3.0.0/lib,
+					/usr/local/Cellar/glfw/3.2.1/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
