@@ -12,9 +12,9 @@
 #include <string.h>
 
 #else
-#include "stdafx.h"
 #include "../Dependencies/glew/glew.h"
 #include "../Dependencies/freeglut/freeglut.h"
+#include <string>
 #endif
 
 #include <iostream>
@@ -45,6 +45,13 @@ void main()                                                                   \n
 FragColor = vec4(1.0, 0.0, 0.0, 1.0);                                     \n\
 }";
 
+
+// Get file length
+unsigned long GetFileLength()
+{
+	return 1;
+}
+
 // Load Shader
 static string LoadShader(string filename){
     
@@ -54,7 +61,7 @@ static string LoadShader(string filename){
     if (!file) return "error";
     
     string shader;
-    while (getline(file, line)){
+    while (std::getline(file, line)){
         shader += line;
         shader += "/n";
     }
@@ -66,14 +73,14 @@ static string LoadShader(string filename){
 
 static void CreateVertexBuffer()
 {
-	Vector3f Vertices[3];
-	Vertices[0] = Vector3f(-1.0f, -1.0f, 0.0f);
-	Vertices[1] = Vector3f(1.0f, -1.0f, 0.0f);
-	Vertices[2] = Vector3f(0.0f, 1.0f, 0.0f);
+    Vector3f Vertices[3];
+    Vertices[0] = Vector3f(-1.0f, -1.0f, 0.0f);
+    Vertices[1] = Vector3f(1.0f, -1.0f, 0.0f);
+    Vertices[2] = Vector3f(0.0f, 1.0f, 0.0f);
 
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
 }
 
 static void AddShader(GLuint shaderProgram, const char *pShaderText, GLenum shaderType){
@@ -237,40 +244,40 @@ static void InitializeGlutCallbacks()
 
 int main(int argc, char** argv)
 {
-	// Init glut
-	glutInit(&argc, argv);
+    // Init glut
+    glutInit(&argc, argv);
 
-	// Configure Display
+    // Configure Display
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     
-	glutInitWindowSize(1024, 768);
-	glutInitWindowPosition(100, 100);
-	glutCreateWindow("GameEngine");
+    glutInitWindowSize(1024, 768);
+    glutInitWindowPosition(100, 100);
+    glutCreateWindow("GameEngine");
 
     fprintf(stderr, "GLSL V: %s", glGetString(GL_VERSION));
     
-	// register callbacks
-	InitializeGlutCallbacks();
+    // register callbacks
+    InitializeGlutCallbacks();
 
-	GLenum res = glewInit();
-	if (res != GLEW_OK)
-	{
+    GLenum res = glewInit();
+    if (res != GLEW_OK)
+    {
         std::cout << "Error: %s\n" << glewGetErrorString(res) << std::endl;
-		return 1;
-	}
+        return 1;
+    }
     
     // Clear screen
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     
     // Create the vertexs
-	CreateVertexBuffer();
+    CreateVertexBuffer();
 
     // Create and compile shaders
     CompileShader();
 
-	glutMainLoop();
-	return 0;
+    glutMainLoop();
+    return 0;
 }
 
 #endif
