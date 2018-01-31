@@ -45,6 +45,13 @@ void main()                                                                   \n
 FragColor = vec4(1.0, 0.0, 0.0, 1.0);                                     \n\
 }";
 
+
+// Get file length
+unsigned long GetFileLength()
+{
+	return 1;
+}
+
 // Load Shader
 static string LoadShader(string filename){
     
